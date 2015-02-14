@@ -1,0 +1,4 @@
+D:\Cubby\Worksplace\OurSerializer\OurSerializer\bin\Debug\OurSerializer.dll
+D:\Cubby\Worksplace\OurSerializer\OurSerializer\bin\Debug\OurSerializer.pdb
+D:\Cubby\Worksplace\OurSerializer\OurSerializer\obj\Debug\OurSerializer.dll
+D:\Cubby\Worksplace\OurSerializer\OurSerializer\obj\Debug\OurSerializer.pdb
