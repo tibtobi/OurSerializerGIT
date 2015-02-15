@@ -2,6 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Extending_WCF;
 using System.IO;
+using UnitTestSerializer;
+using System.Collections.Generic;
 
 namespace UnitTestSerializer
 {
@@ -12,17 +14,10 @@ namespace UnitTestSerializer
         public void TestUInt64()
         {
             //Init           
+            
             UInt64 testUInt64 = 0xFFFFFFFFEEEEEE;
-            UInt64 ansUInt64Num;
-            var s = new MemoryStream();
-
-            //Serialize
-            GenSerializer.Serialize<UInt64>(s, testUInt64);
-            s.Position = 0;
-
-            //Deserialize
-            ansUInt64Num = (UInt64)GenSerializer.Deserialize<UInt64>(s);
-            Assert.AreEqual(testUInt64, ansUInt64Num);
+            List<byte[]> list = new List<byte[]>();
+            
         }
 
         [TestMethod]
@@ -36,7 +31,6 @@ namespace UnitTestSerializer
             //Serialize
             GenSerializer.Serialize<double>(s, testDouble);
             s.Position = 0;
-
             //Deserialize
             ansDoubleNum = (double)GenSerializer.Deserialize<UInt64>(s);
             Assert.AreEqual(testDouble, ansDoubleNum);
