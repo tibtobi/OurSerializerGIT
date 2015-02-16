@@ -809,37 +809,40 @@ namespace Extending_WCF
             s.Write(bytes, 0, bytes.Length);
         }
 
+        //létrehozza egy tuple-be a sorosító és visszaállító függvényeket
         private static Tuple<Delegate, Delegate> getSerializerTuple<T>()
         {
-            string typename = typeof(T).AssemblyQualifiedName;
+            string typename = typeof(T).AssemblyQualifiedName;                 //T típusát megállapítja
             Tuple<Delegate, Delegate> serializer;
-            if (!genSerDict.TryGetValue(typename, out serializer))
+            if (!genSerDict.TryGetValue(typename, out serializer))             //genSerDict.TryGetValue() akkor lesz igaz, ha tartalmazza a dictionary a paraméterként adott értéket az adott kulccsal
             {
-                CreateSerializer<T>(typename);
-                if (!genSerDict.TryGetValue(typename, out serializer))
+                CreateSerializer<T>(typename);                                 //nincs, ez a típus még tárolva, létrehozza a sorosító szerelvényt
+                if (!genSerDict.TryGetValue(typename, out serializer))         //ha ezután sem tárolja az értéket, akkor kivételt dob.
                 {
                     throw new NotImplementedException();
                 }
             }
-            return serializer;
+            return serializer;                                                  //visszatér a sorosító és visszaállító függvényeket
         }
 
+        //A függvény létrehozatja a sorosító metódust, majd meghívja azt
         public static void _Serialize<T>(Stream s, T o, bool checkType, int referenceId)
         {
 
-            Tuple<Delegate, Delegate> serializer = getSerializerTuple<T>();
-            serialize<T> serializeMethod = (serialize<T>)serializer.Item1;
-            serializeMethod(s, o, checkType, referenceId);
+            Tuple<Delegate, Delegate> serializer = getSerializerTuple<T>();     //getSerializerTuple addja a vissza a sorosító és visszaállító függvényeket
+            serialize<T> serializeMethod = (serialize<T>)serializer.Item1;      //a sorosító függvényt tárolja a statikus változoként létrehozott delegate-be
+            serializeMethod(s, o, checkType, referenceId);                      //meghívja a sorosító függvényt a delegate-ből
         }
 
+        //"belépési pont", ezzel lehet példányosítani az osztályt
         public static void Serialize<T>(Stream s, T o)
         {
-            foreach (var item in referenceStore)
+            foreach (var item in referenceStore) 
             {
                 item.Value.Clear();
             }
             refCounter = 0;
-            _Serialize<T>(s, o, true, -1);
+            _Serialize<T>(s, o, true, -1);      //felkészül a példányosításra
         }
 
         public static T _Deserialize<T>(Stream s, int objectId)
