@@ -2,6 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Extending_WCF;
 using System.IO;
+using UnitTestSerializer;
+using System.Collections.Generic;
 
 namespace UnitTestSerializer
 {
@@ -10,70 +12,48 @@ namespace UnitTestSerializer
     {
         [TestMethod]
         public void TestUInt64()
-        {
-            //Init           
-            UInt64 testUInt64 = 0xFFFFFFFFEEEEEE;
-            UInt64 ansUInt64Num;
-            var s = new MemoryStream();
-
-            //Serialize
-            GenSerializer.Serialize<UInt64>(s, testUInt64);
-            s.Position = 0;
-
-            //Deserialize
-            ansUInt64Num = (UInt64)GenSerializer.Deserialize<UInt64>(s);
-            Assert.AreEqual(testUInt64, ansUInt64Num);
+        {   
+            UInt64 testUInt64 = 0xF;
+            List<byte[]> list = new List<byte[]>();
+            list = CompareMethode.testGen<UInt64>(testUInt64);
+            CollectionAssert.AreEqual(list[0], list[1]);       
         }
 
         [TestMethod]
-        public void TestDoubleSmall()
+        public void TestDouble()
         {
-            //Init           
-            double testDouble = 0.000000000000000001;
-            double ansDoubleNum;
-            var s = new MemoryStream();
-
-            //Serialize
-            GenSerializer.Serialize<double>(s, testDouble);
-            s.Position = 0;
-
-            //Deserialize
-            ansDoubleNum = (double)GenSerializer.Deserialize<UInt64>(s);
-            Assert.AreEqual(testDouble, ansDoubleNum);
-        }
-
-        [TestMethod]
-        public void TestDoubleBig()
-        {
-            //Init           
-            double testDouble = 123456789123456789;
-            double ansDoubleNum;
-            var s = new MemoryStream();
-
-            //Serialize
-            GenSerializer.Serialize<double>(s, testDouble);
-            s.Position = 0;
-
-            //Deserialize
-            ansDoubleNum = (double)GenSerializer.Deserialize<UInt64>(s);
-            Assert.AreEqual(testDouble, ansDoubleNum);
+            double testDouble = 1.7E+30;
+            List<byte[]> list = new List<byte[]>();
+            list = CompareMethode.testGen<double>(testDouble);
+            CollectionAssert.AreEqual(list[0], list[1]);
         }
 
         [TestMethod]
         public void TestSingle()
         {
-            //Init           
-            double testSingle = 0.2f;
-            double ansSingleNum;
-            var s = new MemoryStream();
-
-            //Serialize
-            GenSerializer.Serialize<double>(s, testSingle);
-            s.Position = 0;
-
-            //Deserialize
-            ansSingleNum = (double)GenSerializer.Deserialize<UInt64>(s);
-            Assert.AreEqual(testSingle, ansSingleNum);
+            float testSingle = 3500000000F;
+            List<byte[]> list = new List<byte[]>();
+            list = CompareMethode.testGen<float>(testSingle);
+            CollectionAssert.AreEqual(list[0], list[1]);
         }
+
+        [TestMethod]
+        public void TestDateTime()
+        {
+            DateTime testDateTime = DateTime.Now;
+            List<byte[]> list = new List<byte[]>();
+            list = CompareMethode.testGen<DateTime>(testDateTime);
+            CollectionAssert.AreEqual(list[0], list[1]);
+        }
+
+        [TestMethod]
+        public void TestString()
+        {
+            string testString = "Dog";
+            List<byte[]> list = new List<byte[]>();
+            list = CompareMethode.testGen<string>(testString);
+            CollectionAssert.AreEqual(list[0], list[1]);
+        }
+
     }
 }
