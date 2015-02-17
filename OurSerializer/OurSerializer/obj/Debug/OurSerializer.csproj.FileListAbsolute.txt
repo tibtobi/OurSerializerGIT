@@ -10,3 +10,4 @@ D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\bin\Debug\OurS
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\bin\Debug\OurSerializer.pdb
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.dll
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.pdb
+D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.csprojResolveAssemblyReference.cache

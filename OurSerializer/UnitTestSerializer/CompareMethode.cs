@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Extending_WCF;
 
+
 namespace UnitTestSerializer
 {
     class CompareMethode
@@ -51,8 +52,9 @@ namespace UnitTestSerializer
         {
             if(!debug_mode)
                 return;
-            FileStream fs1 = new FileStream(@"D:\Cubby\Worksplace\OurSerializerGIT\TestTxt\fs1_"+ typeParameterType +".txt", FileMode.OpenOrCreate);
-            FileStream fs2 = new FileStream(@"D:\Cubby\Worksplace\OurSerializerGIT\TestTxt\fs2_" + typeParameterType + ".txt", FileMode.OpenOrCreate);
+           
+            FileStream fs1 = new FileStream(@"D:\Dev\Önlab\GitHub\OurSerializerGIT\fs1_" + typeParameterType + ".txt", FileMode.OpenOrCreate);
+            FileStream fs2 = new FileStream(@"D:\Dev\Önlab\GitHub\OurSerializerGIT\fs2_" + typeParameterType + ".txt", FileMode.OpenOrCreate);
             memory1.Position = 0;
             memory1.CopyTo(fs1);
             memory2.Position = 0;
