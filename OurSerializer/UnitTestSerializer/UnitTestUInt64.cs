@@ -47,6 +47,15 @@ namespace UnitTestSerializer
         }
 
         [TestMethod]
+        public void TestDateTime()
+        {
+            DateTime testDateTime = DateTime.Now;
+            List<byte[]> list = new List<byte[]>();
+            list = CompareMethode.testGen<DateTime>(testDateTime);
+            CollectionAssert.AreEqual(list[0], list[1]);
+        }
+
+        [TestMethod]
         public void TestString()
         {
             string testString = "Dog";
