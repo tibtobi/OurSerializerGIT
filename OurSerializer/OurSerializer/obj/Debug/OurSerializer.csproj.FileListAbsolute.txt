@@ -1,17 +1,6 @@
-D:\Cubby\Worksplace\OurSerializer\OurSerializer\bin\Debug\OurSerializer.dll
-D:\Cubby\Worksplace\OurSerializer\OurSerializer\bin\Debug\OurSerializer.pdb
-D:\Cubby\Worksplace\OurSerializer\OurSerializer\obj\Debug\OurSerializer.dll
-D:\Cubby\Worksplace\OurSerializer\OurSerializer\obj\Debug\OurSerializer.pdb
-D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\OurSerializer\bin\Debug\OurSerializer.dll
-D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\OurSerializer\bin\Debug\OurSerializer.pdb
-D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.dll
-D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.pdb
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\bin\Debug\OurSerializer.dll
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\bin\Debug\OurSerializer.pdb
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.dll
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.pdb
-<<<<<<< HEAD
-D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.csprojResolveAssemblyReference.cache
-=======
-D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.csprojResolveAssemblyReference.cache
->>>>>>> origin/master
+D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\bin\Debug\Newtonsoft.Json.dll
+D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\bin\Debug\Newtonsoft.Json.xml

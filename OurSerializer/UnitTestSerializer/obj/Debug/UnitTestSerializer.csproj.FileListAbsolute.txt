@@ -12,3 +12,4 @@ D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\UnitTestSerializer\bin\Debug
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\UnitTestSerializer\obj\Debug\UnitTestSerializer.csprojResolveAssemblyReference.cache
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\UnitTestSerializer\obj\Debug\UnitTestSerializer.dll
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\UnitTestSerializer\obj\Debug\UnitTestSerializer.pdb
+D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\UnitTestSerializer\bin\Debug\Newtonsoft.Json.dll

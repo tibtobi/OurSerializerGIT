@@ -173,10 +173,11 @@ namespace Extending_WCF
                     dil.Emit(OpCodes.Pop);
                     dil.MarkLabel(objectIdRead);
                 }
-                #region Collections
-                //ellenőrzi hogy a collection-e és hogy megfeleltethető-e valamilyen típusnak
+                
+                //ellenőrzi hogy a collection-e 
                 if (typeof(ICollection).IsAssignableFrom(t) && typeof(ICollection<>).MakeGenericType(t.GetGenericArguments()[0]).IsAssignableFrom(t))
                 {
+                    #region Collections
                     MethodInfo getCurrent = typeof(IEnumerator).GetProperty("Current").GetGetMethod();
                     MethodInfo getEnumerator = typeof(IEnumerable).GetMethod("GetEnumerator");
                     MethodInfo moveNext = typeof(IEnumerator).GetMethod("MoveNext");
@@ -272,7 +273,7 @@ namespace Extending_WCF
                     dil.Emit(OpCodes.Brtrue, desCollMember);
                 }
                 #endregion
-                else            //ha nem lehet valamilyen ismert típusnak megfeletetni a collection-t
+                else            //ha nem collection
                 {
                     LocalBuilder objStore = dil.DeclareLocal(typeof(Dictionary<int, object>));
                     if (t.IsClass)
@@ -334,7 +335,7 @@ namespace Extending_WCF
                         sil.Emit(OpCodes.Ldloc, referenceId);
                         sil.Emit(OpCodes.Callvirt, add);
                         sil.MarkLabel(isRefIdSerialized);
-                        //<-----------------
+                        
                         LocalBuilder tempObj = dil.DeclareLocal(typeof(object));
                         LocalBuilder objIsIn = dil.DeclareLocal(typeof(bool));
                         //Get the apropriate objectStore
@@ -368,9 +369,11 @@ namespace Extending_WCF
                     }
                     else
                     {
-                        #region descendant
+                        //ez nem fut le sosem
+                        
                         if (false && t.IsClass)
                         {
+                            #region descendant
                             Label serNotDescendant = sil.DefineLabel();
                             Label serNoCheckType = sil.DefineLabel();
                             LocalBuilder serDescendant = sil.DeclareLocal(typeof(bool));
@@ -499,6 +502,7 @@ namespace Extending_WCF
                             dil.MarkLabel(deserNotDescendant);
                         #endregion
                         }
+                        
                         MethodInfo discMethod = genSerType.GetMethod("Discover", BindingFlags.NonPublic | BindingFlags.Static);
                         var fields = t.GetFields(bf).OrderBy(x => x.Name);
                         dil.Emit(OpCodes.Call, createMethod);
