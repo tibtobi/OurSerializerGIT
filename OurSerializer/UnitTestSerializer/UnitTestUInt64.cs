@@ -10,15 +10,7 @@ namespace UnitTestSerializer
     [TestClass]
     public class UnitTestUInt64
     {
-        [TestMethod]
-        public void TestUInt64()
-        {   
-            UInt64 testUInt64 = 0xF;
-            List<byte[]> list = new List<byte[]>();
-            list = CompareMethode.testGen<UInt64>(testUInt64);
-            CollectionAssert.AreEqual(list[0], list[1]);       
-        }
-
+       /* 
         [TestMethod]
         public void TestDouble()
         {
@@ -47,22 +39,20 @@ namespace UnitTestSerializer
         }
 
         [TestMethod]
-        public void TestDateTime()
-        {
-            DateTime testDateTime = DateTime.Now;
-            List<byte[]> list = new List<byte[]>();
-            list = CompareMethode.testGen<DateTime>(testDateTime);
-            CollectionAssert.AreEqual(list[0], list[1]);
-        }
-
-        [TestMethod]
         public void TestString()
         {
             string testString = "Dog";
             List<byte[]> list = new List<byte[]>();
             list = CompareMethode.testGen<string>(testString);
             CollectionAssert.AreEqual(list[0], list[1]);
+        }*/
+        [TestMethod]
+        public void TestUInt64()
+        {   
+            UInt64 testUInt64 = 0xF;
+            List<byte[]> list = new List<byte[]>();
+            list = CompareMethode.testGen<UInt64>(testUInt64);
+            CollectionAssert.AreEqual(list[0], list[1]);       
         }
-
     }
 }

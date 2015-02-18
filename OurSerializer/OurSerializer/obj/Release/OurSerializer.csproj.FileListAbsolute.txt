@@ -1,0 +1,4 @@
+D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\OurSerializer\bin\Release\OurSerializer.dll
+D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\OurSerializer\bin\Release\OurSerializer.pdb
+D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\OurSerializer\obj\Release\OurSerializer.dll
+D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\OurSerializer\obj\Release\OurSerializer.pdb
