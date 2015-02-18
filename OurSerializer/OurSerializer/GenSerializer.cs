@@ -829,7 +829,7 @@ namespace Extending_WCF
         public static void _Serialize<T>(Stream s, T o, bool checkType, int referenceId)
         {
 
-            Tuple<Delegate, Delegate> serializer = getSerializerTuple<T>();     //getSerializerTuple addja a vissza a sorosító és visszaállító függvényeket
+            Tuple<Delegate, Delegate> serializer = getSerializerTuple<T>();     //getSerializerTuple adja a vissza a sorosító és visszaállító függvényeket
             serialize<T> serializeMethod = (serialize<T>)serializer.Item1;      //a sorosító függvényt tárolja a statikus változoként létrehozott delegate-be
             serializeMethod(s, o, checkType, referenceId);                      //meghívja a sorosító függvényt a delegate-ből
         }

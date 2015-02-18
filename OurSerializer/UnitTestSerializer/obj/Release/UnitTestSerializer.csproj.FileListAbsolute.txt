@@ -1,0 +1,7 @@
+D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\UnitTestSerializer\obj\Release\UnitTestSerializer.csprojResolveAssemblyReference.cache
+D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\UnitTestSerializer\bin\Release\UnitTestSerializer.dll
+D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\UnitTestSerializer\bin\Release\UnitTestSerializer.pdb
+D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\UnitTestSerializer\bin\Release\OurSerializer.dll
+D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\UnitTestSerializer\bin\Release\OurSerializer.pdb
+D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\UnitTestSerializer\obj\Release\UnitTestSerializer.dll
+D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\UnitTestSerializer\obj\Release\UnitTestSerializer.pdb
