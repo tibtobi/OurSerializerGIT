@@ -44,8 +44,10 @@ namespace Extending_WCF
             var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndSave);
             var moduleBuilder = assemblyBuilder.DefineDynamicModule(assemblyName.Name, assemblyName.Name + ".dll");
             var typebuilder = moduleBuilder.DefineType("GeneratedSerializer", TypeAttributes.Public);
+            //metódusok hozzáadása a típushoz
             var debugSerializeMethodBuilder = typebuilder.DefineMethod("Serialize", MethodAttributes.Public | MethodAttributes.Static, typeof(void), new Type[] { typeof(Stream), typeof(T), typeof(bool), typeof(int) });
             var debugDeserializeMethodBuilder = typebuilder.DefineMethod("Deserialize", MethodAttributes.Public | MethodAttributes.Static, typeof(T), new Type[] { typeof(Stream), typeof(int) });
+            
             ILGenerator debugSIL = debugSerializeMethodBuilder.GetILGenerator();
             ILGenerator debugDIL = debugDeserializeMethodBuilder.GetILGenerator();
             Discover<T>(debugSIL, debugDIL);
@@ -82,6 +84,7 @@ namespace Extending_WCF
         private static void Discover<T>(ILGenerator sil, ILGenerator dil)
         {
             Type t = typeof(T);
+            //begyűjti a függvény információkat a későbbi névszerinti hívásokhoz
             MethodInfo makeGenericMethod = typeof(MethodInfo).GetMethod("MakeGenericMethod");
             MethodInfo getType = typeof(Object).GetMethod("GetType");
             MethodInfo getSerializer = genSerType.GetMethod("getSerializer", BindingFlags.Public | BindingFlags.Static);
@@ -94,6 +97,7 @@ namespace Extending_WCF
             MethodInfo getAssemblyQualifiedName = typeof(Type).GetProperty("AssemblyQualifiedName").GetGetMethod();
             MethodInfo stringEquals = typeof(String).GetMethod("Equals", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(string), typeof(string) }, null);
             createMethod = createMethod.MakeGenericMethod(t);
+            //címkéket hoz létre a IL kódhoz
             Label serNullLabel = sil.DefineLabel();
             Label deserNullLabel = dil.DefineLabel();
             Label notNullLabel = sil.DefineLabel();
@@ -101,19 +105,25 @@ namespace Extending_WCF
             Label collectionExitLabel = sil.DefineLabel();
             Label isInRefStoreLabel = sil.DefineLabel();
             Label isNotInObjStoreLabel = dil.DefineLabel();
+            //változókat hoz létre az IL kódhoz
             LocalBuilder locSer = sil.DeclareLocal(t);
             LocalBuilder locDe = dil.DeclareLocal(t);
             LocalBuilder referenceId = sil.DeclareLocal(typeof(int));
             LocalBuilder objectId = dil.DeclareLocal(typeof(int));
 
+            //ellenőrzi, hogy az sorosítandó objektum a stack tetején van-e, ha nincs akkor push-olja. Azért az Ldarg_1-et használ, 
+            //mert statikus függvény ezért nincs this
             if (!isOnTop)
             {
                 isOnTop = true;
                 sil.Emit(OpCodes.Ldarg_1);
             }
+
+            //változóba helyezi a sorosítandó objektumot, és jelzi, hogy nincs a stack tetején
             sil.Emit(OpCodes.Stloc, locSer);
             isOnTop = false;
 
+            //debug mód esetén tárolja a sorosított objektum nevét, illetve visszállításnál kiolvassa
             if (DEBUG)
             {
                 sil.Emit(OpCodes.Ldstr, t.AssemblyQualifiedName);
@@ -123,6 +133,7 @@ namespace Extending_WCF
                 dil.Emit(OpCodes.Pop);
             }
             
+            //primitív T esetén a megfelelő metódusokat helyezi el a szerelvénybe
             if (t.IsPrimitive)
             {
                 sil.Emit(OpCodes.Ldloc, locSer);
@@ -133,7 +144,7 @@ namespace Extending_WCF
             {
                 if (t.IsClass)
                 {
-                    //Is null?
+                    //Is null?  ha null akkor betölt -1-et
                     sil.Emit(OpCodes.Ldloc, locSer);
                     sil.Emit(OpCodes.Ldnull);
                     sil.Emit(OpCodes.Ceq);
@@ -145,7 +156,7 @@ namespace Extending_WCF
 
                     //Check if objectId has been already read
                     Label objectIdRead = dil.DefineLabel();
-                    dil.Emit(OpCodes.Ldarg_1);
+                    dil.Emit(OpCodes.Ldarg_1);          //betölti az objektumot
                     dil.Emit(OpCodes.Stloc, objectId);
                     dil.Emit(OpCodes.Ldarg_1);
                     dil.Emit(OpCodes.Ldc_I4, -1);
@@ -163,6 +174,7 @@ namespace Extending_WCF
                     dil.MarkLabel(objectIdRead);
                 }
                 #region Collections
+                //ellenőrzi hogy a collection-e és hogy megfeleltethető-e valamilyen típusnak
                 if (typeof(ICollection).IsAssignableFrom(t) && typeof(ICollection<>).MakeGenericType(t.GetGenericArguments()[0]).IsAssignableFrom(t))
                 {
                     MethodInfo getCurrent = typeof(IEnumerator).GetProperty("Current").GetGetMethod();
@@ -183,7 +195,9 @@ namespace Extending_WCF
                     //Get the item count of the collection
                     sil.Emit(OpCodes.Ldloc, locSer);
                     sil.Emit(OpCodes.Callvirt, getEnumerator);
+                    //tárolja a collection iterátorát
                     sil.Emit(OpCodes.Stloc, enumerator);
+                    //inicializálja a segédváltozókat
                     sil.Emit(OpCodes.Ldc_I4, -1);
                     sil.Emit(OpCodes.Stloc, serializeCount);
                     sil.Emit(OpCodes.Ldc_I4, 0);
@@ -191,6 +205,7 @@ namespace Extending_WCF
                     sil.MarkLabel(countCollection);
                     sil.Emit(OpCodes.Ldloc, serializeCount);
                     //Add one to the counter
+                    //végig megy a collection-ön, megszámolja az elemeit egy ciklussal
                     sil.Emit(OpCodes.Ldc_I4, 1);
                     sil.Emit(OpCodes.Add);
                     sil.Emit(OpCodes.Stloc, serializeCount);
@@ -200,6 +215,7 @@ namespace Extending_WCF
                     //Check whether it's heterogenius
                     sil.Emit(OpCodes.Ldloc, checkType);
                     sil.Emit(OpCodes.Brtrue, countCollection);
+                    //új típusnál ellenőrzi a típus adatait, és folytatja a számolást
                     sil.Emit(OpCodes.Ldloc, enumerator);
                     sil.Emit(OpCodes.Callvirt, getCurrent);
                     sil.Emit(OpCodes.Callvirt, getType);
@@ -209,6 +225,7 @@ namespace Extending_WCF
                     sil.Emit(OpCodes.Stloc, checkType);
                     sil.Emit(OpCodes.Br, countCollection);
                     sil.MarkLabel(countCollectionEnd);
+                    //tárolja az elemszámot
                     sil.Emit(OpCodes.Ldloc, serializeCount);
                     EmitSerializePrimitive<int>(sil);
                     sil.Emit(OpCodes.Ldloc, enumerator);
@@ -224,20 +241,23 @@ namespace Extending_WCF
                     sil.Emit(OpCodes.Unbox_Any, t.GetGenericArguments()[0]);
                     sil.Emit(OpCodes.Ldloc, checkType);
                     sil.Emit(OpCodes.Ldc_I4, -1);
-                    sil.Emit(OpCodes.Call, serializeTyped);
-                    sil.Emit(OpCodes.Br, collectionEntryLabel);
+                    sil.Emit(OpCodes.Call, serializeTyped);         //meghívja a _Serialize függvényt az unboxed (megfeleltetett) típussal
+                    sil.Emit(OpCodes.Br, collectionEntryLabel);         
                     sil.MarkLabel(collectionExitLabel);
 
                     //DESERIALIZE Collection
                     Label desCollMember = dil.DefineLabel();
                     LocalBuilder deserializeCount = dil.DeclareLocal(typeof(int));
+                    //létrehoz egy referenciát a későbbi objektumnak
                     dil.Emit(OpCodes.Call, createMethod);
                     dil.Emit(OpCodes.Stloc, locDe);
+                    //megkapja a hosszát a collection-nek
                     EmitDeserializePrimitive<int>(dil);
                     dil.Emit(OpCodes.Stloc, deserializeCount);
                     dil.MarkLabel(desCollMember);
                     dil.Emit(OpCodes.Ldloc, locDe);
                     MethodInfo deserializeTyped = deserialize.MakeGenericMethod(t.GetGenericArguments()[0]);
+                    //egyesével kiolvassa az elemeket és csökkenti a hosszt számontartó változót
                     dil.Emit(OpCodes.Ldarg_0);
                     dil.Emit(OpCodes.Ldc_I4, -1);
                     dil.Emit(OpCodes.Call, deserializeTyped);
@@ -252,7 +272,7 @@ namespace Extending_WCF
                     dil.Emit(OpCodes.Brtrue, desCollMember);
                 }
                 #endregion
-                else
+                else            //ha nem lehet valamilyen ismert típusnak megfeletetni a collection-t
                 {
                     LocalBuilder objStore = dil.DeclareLocal(typeof(Dictionary<int, object>));
                     if (t.IsClass)
@@ -268,14 +288,18 @@ namespace Extending_WCF
                         MethodInfo tryGetValueRefStore = referenceStore.GetType().GetMethod("TryGetValue");
                         MethodInfo tryGetValue = typeof(Dictionary<object, int>).GetMethod("TryGetValue");
                         MethodInfo add = typeof(Dictionary<object, int>).GetMethod("Add");
+                        //stackbe tölti a referencId-t
                         sil.Emit(OpCodes.Ldarg_3);
                         sil.Emit(OpCodes.Stloc, referenceId);
                         sil.Emit(OpCodes.Ldarg_3);
                         sil.Emit(OpCodes.Ldc_I4, -1);
+                        //ellenőrzi, hogy a referenceId sorosítva van-e
                         sil.Emit(OpCodes.Bgt, isRefIdSerialized);
                         sil.Emit(OpCodes.Ldsfld, referenceStoreFI);
                         sil.Emit(OpCodes.Ldloc, locSer);
+                        //bedobozolja az objektumot
                         sil.Emit(OpCodes.Box, t);
+                        //lekérdezi a típust
                         sil.Emit(OpCodes.Callvirt, getType);
                         sil.Emit(OpCodes.Callvirt, getAssemblyQualifiedName);
                         sil.Emit(OpCodes.Ldloca, refStore);
@@ -310,7 +334,7 @@ namespace Extending_WCF
                         sil.Emit(OpCodes.Ldloc, referenceId);
                         sil.Emit(OpCodes.Callvirt, add);
                         sil.MarkLabel(isRefIdSerialized);
-
+                        //<-----------------
                         LocalBuilder tempObj = dil.DeclareLocal(typeof(object));
                         LocalBuilder objIsIn = dil.DeclareLocal(typeof(bool));
                         //Get the apropriate objectStore

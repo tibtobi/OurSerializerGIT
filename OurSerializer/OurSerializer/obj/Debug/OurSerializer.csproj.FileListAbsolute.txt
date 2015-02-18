@@ -10,4 +10,8 @@ D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\bin\Debug\OurS
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\bin\Debug\OurSerializer.pdb
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.dll
 D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.pdb
+<<<<<<< HEAD
 D:\Cubby\Worksplace\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.csprojResolveAssemblyReference.cache
+=======
+D:\Dev\Önlab\GitHub\OurSerializerGIT\OurSerializer\OurSerializer\obj\Debug\OurSerializer.csprojResolveAssemblyReference.cache
+>>>>>>> origin/master
