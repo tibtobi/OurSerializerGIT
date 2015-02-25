@@ -175,14 +175,24 @@ namespace Extending_WCF
                 }
                 
                 //ellenőrzi hogy a collection-e 
-                if (typeof(ICollection).IsAssignableFrom(t) && typeof(ICollection<>).MakeGenericType(t.GetGenericArguments()[0]).IsAssignableFrom(t))
+                if (typeof(IEnumerable).IsAssignableFrom(t) && typeof(IEnumerable<>).MakeGenericType(t.GetGenericArguments()[0]).IsAssignableFrom(t))
                 {
                     #region Collections
                     MethodInfo getCurrent = typeof(IEnumerator).GetProperty("Current").GetGetMethod();
                     MethodInfo getEnumerator = typeof(IEnumerable).GetMethod("GetEnumerator");
                     MethodInfo moveNext = typeof(IEnumerator).GetMethod("MoveNext");
                     MethodInfo reset = typeof(IEnumerator).GetMethod("Reset");
-                    MethodInfo add = t.GetMethod("Add");
+                    MethodInfo add;
+                    if (typeof(Queue<>).MakeGenericType(t.GetGenericArguments()[0]).IsAssignableFrom(t))
+                    { 
+                        add = t.GetMethod("Enqueue");
+                    } else if (typeof(Stack<>).MakeGenericType(t.GetGenericArguments()[0]).IsAssignableFrom(t))
+                    {
+                        add = t.GetMethod("Push");
+                    } else
+                    {
+                        add = t.GetMethod("Add");
+                    }
                     MethodInfo serializeTyped = serialize.MakeGenericMethod(t.GetGenericArguments()[0]);
                     //SERIALIZE Collection
                     Label countCollection = sil.DefineLabel();
